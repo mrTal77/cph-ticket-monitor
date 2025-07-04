@@ -156,7 +156,7 @@ def send_notification(screenshot_path, tickets_available, status_message):
 def main():
     """Main function to monitor tickets"""
     print("=" * 50)
-    print("CPH Half 2025 Ticket Monitor")
+    print("CPH Half 2025 Ticket Monitor - SMART MODE ACTIVE")
     print(f"Time: {datetime.now()}")
     print(f"Monitoring: {URL}")
     print(f"Notifications to: {TO_EMAIL}")
@@ -172,13 +172,16 @@ def main():
         # Take screenshot and check status
         screenshot_path, tickets_available, status_message = take_screenshot(driver)
         
-        # Always send notification (screenshot + status)
-        if screenshot_path:
+        # SMART MODE: Only send email if tickets are available or error
+        if tickets_available == True:  # Tickets found!
+            print("🎟️ TICKETS DETECTED! Sending alert email...")
             send_notification(screenshot_path, tickets_available, status_message)
-        else:
-            print("Failed to take screenshot")
-            # Send error notification without screenshot
-            send_notification(None, None, "Failed to capture screenshot")
+        elif tickets_available == None:  # Error occurred
+            print("❌ Error detected! Sending error notification...")
+            send_notification(screenshot_path, tickets_available, status_message)
+        else:  # tickets_available == False
+            print("✓ No tickets available - NOT sending email")
+            print(f"  Status: {status_message}")
             
         # Clean up screenshot file
         if screenshot_path and os.path.exists(screenshot_path):
@@ -193,5 +196,7 @@ def main():
     print("=" * 50)
     print("Check complete!")
 
+if __name__ == "__main__":
+    main()
 if __name__ == "__main__":
     main()
