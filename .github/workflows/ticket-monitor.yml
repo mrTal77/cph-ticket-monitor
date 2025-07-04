@@ -1,4 +1,4 @@
-name: CPH Ticket Monitor
+name:  CPH Ticket Monitor
 
 # Run every 5 minutes (GitHub Actions minimum for scheduled workflows)
 on:
