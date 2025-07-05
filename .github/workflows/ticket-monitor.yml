@@ -1,13 +1,7 @@
 name: CPH Ticket Monitor
 
 on:
-  schedule:
-    # Multiple overlapping schedules for better reliability
-    - cron: '*/5 * * * *'           # Main: every 5 minutes at 0,5,10,15...
-    - cron: '1-59/5 * * * *'        # Backup 1: offset by 1 minute
-    - cron: '2-59/5 * * * *'        # Backup 2: offset by 2 minutes
-    - cron: '3-59/5 * * * *'        # Backup 3: offset by 3 minutes
-  workflow_dispatch:
+  workflow_dispatch:  # Only triggered by cron-job.org now
 
 jobs:
   check-tickets:
@@ -36,47 +30,11 @@ jobs:
         pip install requests
         pip install beautifulsoup4
     
-    - name: Run ticket monitor (1st check)
+    - name: Run ticket monitor
       env:
         TO_EMAIL: ${{ secrets.TO_EMAIL }}
         FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
         EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
       run: |
-        echo "Check 1 of 4 at $(date)"
-        python ticket_monitor.py
-    
-    - name: Wait 1 minute
-      run: sleep 60
-    
-    - name: Run ticket monitor (2nd check)
-      env:
-        TO_EMAIL: ${{ secrets.TO_EMAIL }}
-        FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
-        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-      run: |
-        echo "Check 2 of 4 at $(date)"
-        python ticket_monitor.py
-    
-    - name: Wait 1 minute
-      run: sleep 60
-    
-    - name: Run ticket monitor (3rd check)
-      env:
-        TO_EMAIL: ${{ secrets.TO_EMAIL }}
-        FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
-        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-      run: |
-        echo "Check 3 of 4 at $(date)"
-        python ticket_monitor.py
-    
-    - name: Wait 1 minute
-      run: sleep 60
-    
-    - name: Run ticket monitor (4th check)
-      env:
-        TO_EMAIL: ${{ secrets.TO_EMAIL }}
-        FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
-        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-      run: |
-        echo "Check 4 of 4 at $(date)"
+        echo "Running ticket check at $(date)"
         python ticket_monitor.py
