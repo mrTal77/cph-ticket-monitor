@@ -178,7 +178,7 @@ def main():
             send_notification(screenshot_path, tickets_available, status_message)
         elif tickets_available == None:  # Error occurred
             print("❌ Error detected! Sending error notification...")
-            send_notification(screenshot_path, tickets_available, status_message)
+            #send_notification(screenshot_path, tickets_available, status_message)
         else:  # tickets_available == False
             print("✓ No tickets available - NOT sending email")
             print(f"  Status: {status_message}")
